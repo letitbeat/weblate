@@ -620,7 +620,7 @@ class Unit(models.Model, LoggerMixin):
             id_hash=self.id_hash,
         ).exclude(
             id=self.id
-        )
+        ).order_by('priority', 'position')
         # Update source, number of words and content_hash
         same_source.update(
             source=self.source,
@@ -976,7 +976,7 @@ class Unit(models.Model, LoggerMixin):
                 state__gte=STATE_TRANSLATED,
                 translation__component=self.translation.component,
                 translation__language__in=secondary_langs,
-            )
+            ).order_by('priority', 'position')
         )
 
     @property
