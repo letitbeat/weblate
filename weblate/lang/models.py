@@ -377,10 +377,11 @@ class Language(models.Model):
         ),
     )
 
+    ordering = ['name']
+
     objects = LanguageQuerySet.as_manager()
 
     class Meta(object):
-        ordering = ['name']
         verbose_name = ugettext_lazy('Language')
         verbose_name_plural = ugettext_lazy('Languages')
 
@@ -425,6 +426,10 @@ class Language(models.Model):
         else:
             self.direction = 'ltr'
         return super(Language, self).save(*args, **kwargs)
+
+    @staticmethod
+    def default_ordering():
+        return Language.ordering
 
     @cached_property
     def base_code(self):

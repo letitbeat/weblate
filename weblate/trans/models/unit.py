@@ -238,7 +238,7 @@ class UnitQuerySet(models.QuerySet):
                     params
                 )
             )
-        return result
+        return result.order_by(*Unit.default_ordering())
 
     def more_like_this(self, unit, top=5):
         """Find closely similar units."""
@@ -332,6 +332,8 @@ class Unit(models.Model, LoggerMixin):
     pending = models.BooleanField(default=False)
 
     objects = UnitQuerySet.as_manager()
+
+    ordering = ['priority', 'position']
 
     class Meta(object):
         app_label = 'trans'
@@ -620,7 +622,7 @@ class Unit(models.Model, LoggerMixin):
             id_hash=self.id_hash,
         ).exclude(
             id=self.id
-        ).order_by('priority', 'position')
+        ).order_by(*Unit.default_ordering())
         # Update source, number of words and content_hash
         same_source.update(
             source=self.source,
@@ -911,7 +913,7 @@ class Unit(models.Model, LoggerMixin):
             translation=self.translation,
             position__gte=self.position - settings.NEARBY_MESSAGES,
             position__lte=self.position + settings.NEARBY_MESSAGES,
-        ).order_by('priority', 'position')
+        ).order_by(*Unit.default_ordering())
 
     @transaction.atomic
     def translate(self, request, new_target, new_state, change_action=None,
@@ -976,7 +978,7 @@ class Unit(models.Model, LoggerMixin):
                 state__gte=STATE_TRANSLATED,
                 translation__component=self.translation.component,
                 translation__language__in=secondary_langs,
-            ).order_by('priority', 'position')
+            ).order_by(*Unit.default_ordering())
         )
 
     @property
@@ -1024,3 +1026,7 @@ class Unit(models.Model, LoggerMixin):
         except IndexError as error:
             report_error(error, request, level='error')
             return get_anonymous(), timezone.now()
+
+    @staticmethod
+    def default_ordering():
+        return Unit.ordering

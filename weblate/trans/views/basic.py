@@ -357,7 +357,9 @@ def new_language(request, project, component):
 
         if form.is_valid():
             langs = form.cleaned_data['lang']
-            for language in Language.objects.filter(code__in=langs):
+            languages = Language.objects.filter(code__in=langs
+                                                ).order_by(*Language.default_ordering())
+            for language in languages:
                 if obj.new_lang == 'contact':
                     notify_new_language(obj, language, request.user)
                     messages.success(
