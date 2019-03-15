@@ -58,7 +58,7 @@ class AutoTranslate(object):
         sources = Unit.objects.filter(
             translation__language=self.translation.language,
             state__gte=STATE_TRANSLATED,
-        ).order_by(*Unit.default_ordering())
+        ).order_by(*Unit.ordering)
         if source:
             subprj = Component.objects.get(id=source)
 

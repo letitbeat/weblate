@@ -427,10 +427,6 @@ class Language(models.Model):
             self.direction = 'ltr'
         return super(Language, self).save(*args, **kwargs)
 
-    @staticmethod
-    def default_ordering():
-        return Language.ordering
-
     @cached_property
     def base_code(self):
         return self.code.replace('_', '-').split('-')[0]
@@ -536,8 +532,9 @@ class Plural(models.Model):
     )
     language = models.ForeignKey(Language, on_delete=models.deletion.CASCADE)
 
+    ordering = ['source']
+    
     class Meta(object):
-        ordering = ['source']
         verbose_name = ugettext_lazy('Plural form')
         verbose_name_plural = ugettext_lazy('Plural forms')
 

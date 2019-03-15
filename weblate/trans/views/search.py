@@ -202,11 +202,11 @@ def search(request, project=None, component=None, lang=None):
         units = units.search(
             search_form.cleaned_data,
             **search_kwargs
-        ).order_by(*Unit.default_ordering())
+        ).order_by(*Unit.ordering)
         if lang:
             units = units.filter(
                 translation__language=context['language']
-            ).order_by(*Unit.default_ordering())
+            ).order_by(*Unit.ordering)
 
         units = get_paginator(request, units)
 

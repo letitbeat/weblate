@@ -225,7 +225,7 @@ class WeblateViewSet(DownloadViewSet):
                 changes = Change.objects.filter(
                     action__in=Change.ACTIONS_REPOSITORY,
                     component=obj.component,
-                )
+                ).order_by(*Change.ordering)
             else:
                 data['url'] = reverse(
                     'api:component-repository',
@@ -239,7 +239,7 @@ class WeblateViewSet(DownloadViewSet):
                 changes = Change.objects.filter(
                     action__in=Change.ACTIONS_REPOSITORY,
                     component=obj,
-                )
+                ).order_by(*Change.ordering)
 
             if changes.exists() and changes[0].is_merge_failure():
                 data['merge_failure'] = changes[0].target
@@ -287,7 +287,9 @@ class ProjectViewSet(WeblateViewSet):
     def changes(self, request, **kwargs):
         obj = self.get_object()
 
-        queryset = Change.objects.prefetch().filter(project=obj)
+        queryset = Change.objects.prefetch().filter(
+            project=obj
+        ).order_by(*Change.ordering)
         page = self.paginate_queryset(queryset)
 
         serializer = ChangeSerializer(
@@ -391,7 +393,9 @@ class ComponentViewSet(MultipleFieldMixin, WeblateViewSet):
     def changes(self, request, **kwargs):
         obj = self.get_object()
 
-        queryset = Change.objects.prefetch().filter(component=obj)
+        queryset = Change.objects.prefetch().filter(
+            component=obj
+        ).order_by(*Change.ordering)
         page = self.paginate_queryset(queryset)
 
         serializer = ChangeSerializer(
@@ -505,7 +509,9 @@ class TranslationViewSet(MultipleFieldMixin, WeblateViewSet):
     def changes(self, request, **kwargs):
         obj = self.get_object()
 
-        queryset = Change.objects.prefetch().filter(translation=obj)
+        queryset = Change.objects.prefetch().filter(
+            translation=obj
+        ).order_by(*Change.ordering)
         page = self.paginate_queryset(queryset)
 
         serializer = ChangeSerializer(
