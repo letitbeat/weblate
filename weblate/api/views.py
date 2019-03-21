@@ -265,7 +265,7 @@ class ProjectViewSet(WeblateViewSet):
     def components(self, request, **kwargs):
         obj = self.get_object()
 
-        queryset = obj.component_set.all()
+        queryset = obj.component_set.all().order_by(*Component.ordering)
         page = self.paginate_queryset(queryset)
 
         serializer = ComponentSerializer(
@@ -362,7 +362,7 @@ class ComponentViewSet(MultipleFieldMixin, WeblateViewSet):
     def translations(self, request, **kwargs):
         obj = self.get_object()
 
-        queryset = obj.translation_set.all()
+        queryset = obj.translation_set.all().order_by(*Translation.ordering)
         page = self.paginate_queryset(queryset)
 
         serializer = TranslationSerializer(
@@ -378,7 +378,7 @@ class ComponentViewSet(MultipleFieldMixin, WeblateViewSet):
     def statistics(self, request, **kwargs):
         obj = self.get_object()
 
-        queryset = obj.translation_set.all()
+        queryset = obj.translation_set.all().order_by(*Translation.ordering)
         page = self.paginate_queryset(queryset)
 
         serializer = StatisticsSerializer(
@@ -526,7 +526,7 @@ class TranslationViewSet(MultipleFieldMixin, WeblateViewSet):
     def units(self, request, **kwargs):
         obj = self.get_object()
 
-        queryset = obj.unit_set.all()
+        queryset = obj.unit_set.all().order_by(*Unit.ordering)
         page = self.paginate_queryset(queryset)
 
         serializer = UnitSerializer(

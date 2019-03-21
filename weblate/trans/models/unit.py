@@ -671,7 +671,7 @@ class Unit(models.Model, LoggerMixin):
         user_changes = Change.objects.filter(
             translation=self.translation,
             user=user
-        ).order_by(*Change.ordering)
+        )
         if not user_changes.exists():
             from weblate.accounts.notifications import notify_new_contributor
             notify_new_contributor(self, user)
