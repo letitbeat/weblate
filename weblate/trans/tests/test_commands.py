@@ -22,6 +22,7 @@
 
 from unittest import SkipTest
 import sys
+import re
 
 from six import StringIO
 
@@ -346,6 +347,9 @@ class ImportProjectTest(RepoTestCase):
 
 class BasicCommandTest(SimpleTestCase):
     databases = '__all__'
+
+    if not re.match(r"3.[0-9].[0-9]", django.get_version()):
+        allow_database_queries = True
 
     def test_versions(self):
         output = StringIO()
