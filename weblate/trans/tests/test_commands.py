@@ -26,6 +26,7 @@ import re
 
 from six import StringIO
 
+import django
 from django.test import SimpleTestCase
 from django.core.management import call_command
 from django.core.management.base import CommandError, SystemCheckError

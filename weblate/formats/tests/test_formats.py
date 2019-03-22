@@ -25,6 +25,7 @@ import os.path
 import re
 from unittest import TestCase, SkipTest
 
+import django
 from django.test import SimpleTestCase
 from django.utils.encoding import force_text
 
